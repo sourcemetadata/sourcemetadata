@@ -1,0 +1,316 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: CC0-1.0
+= Project Metadata File Format Specification 0.1.0
+
+:sectnums:
+:xrefstyle: short
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT",
+"RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted
+as described in https://tools.ietf.org/html/rfc2119[RFC 2119].
+
+== Purpose
+
+Project Metadata file provides common information such as homepage, copyright, applied licenses
+about software project.
+
+It can be read by both tools and humans.
+
+Project Metadata file is language/tool-agnostic and can describe projects written
+in any language and built and packaged with any tool.
+
+A Project Metadata is a https://yaml.org/spec/1.2/spec.html[YAML 1.2] formatted
+text file stored in project's source code.
+
+Project Metadata file doesn't describe compiled (binary) artifacts.
+However, built tools are encouraged to use Project Metadata to describe produced artifacts.
+
+== Getting Started
+
+A valid Project Metadata file may look like this:
+
+```yaml
+name: gradle-metadata-plugin
+spec_version: 1.0.0
+version: 1.2.3
+versioning_schema: semver-2.0.0
+description: |-
+  Parsing Project Metadata files from Java and Gradle
+copyright: ©  Basil Peace
+copyright_email: grv87@yandex.ru
+license_expression: GPL-3.0-or-later OR LicenseRef-Proprietary
+licenses:
+  GPL-3.0-or-later:
+    distribution: manual
+  LicenseRef-Proprietary:
+    distribution: repo
+is_internal: false
+scm_url: scm:git:https://github.com/FIDATA/gradle-metadata-plugin
+organization:
+  name: FIDATA
+  url: https://fidata.org/
+developers:
+  grv87:
+    name: Basil Peace
+    organization: FIDATA
+    roles:
+      - author
+      - owner
+      - developer
+    timezone: Europe/Moscow
+    properties:
+      github: grv87
+      twitter: grv87
+issue_management:
+  system: GitHub
+  url: https://github.com/FIDATA/gradle-metadata-plugin/issues
+ci_management:
+  system: Jenkins
+  url: https://jenkins.fidata.org/job/Github/job/gradle-metadata-plugin/
+keywords:
+  - project
+  - metadata
+  - info
+  - contacts
+  - license
+```
+
+== Value Types and Field Names
+
+// TODO: Currently I don't check (and convert) fields in custom maps
+
+0. Rules listed in this section are applied to fields of root document
+and fields on all levels of nested mappings as well.
+
+1. Fields referencing files MUST have name `file` or suffix `_file`.
++
+All paths MUST be relative to directory containing Project Metadata file.
+
+2. For fields referencing file this specification of specifications of extensions MAY prescribe
+separate sibling field with additional `_content_type` suffix.
+If such field is provided then its value MUST contain MIME type for the file
+and MAY contain its charset. For example, `text/asciidoc` or `text/markdown; charset=UTF-8`.
++
+If this field or charset are not provided then charset MAY be detected
+from BOM mark or other methods appropriate for the format with default value of UTF-8.
++
+If this field is not provided then MIME type MAY be detected from extension of the file name.
+If file name has no extension then MIME type MUST be default `text/plain`.
++
+If specification doesn't prescribe such separate field
+then content type of file MUST be `text/plain` and charset MUST be UTF-8.
+
+3. Fields containing URLs MUST have name `url` or suffix `_url`.
+
+4. Fields containing email addresses MUST have name `email` or suffix `_email`.
+
+5. Fields containing physical address MUST have name `address` or suffix `_address`.
+
+6. Fields containing boolean flags MUST have `is_` prefix.
+
+7. Fields containing sequences of files, URLs, emails or physical addresses MUST have names `files`, `urls`,
+`emails`, `addresses` or suffixes `_files`, `_urls`, `_emails`, `_addressed` respectively.
+Values of sequences SHOULD be unique.
+
+8. All other fields not mentioned in articles 2-8 MAY be either strings, sequences of strings,
+mappings or sequences of mappings.
++
+Types of fields are prescribed by this specification and specifications of extensions.
++
+Types of unknown fields mentioned in article 2 of <<_extensions_and_extra_fields>>
+MUST be determined according to YAML rules.
+
+8. All field names are case-sensitive, however, use of lower snake case is recommended.
+
+== Standard Fields
+
+=== Mandatory Fields
+
+The only mandatory fields are `name` and `spec_version`.
+
+=== General Fields
+
+1. `name`: programmatic name of the project
+
+2. `status`: ...
+If `version` field is provided and not matched TODO
+
+2. `spec_version`: The version of Project Metadata specification used to create Project Metadata file
+
+3. `title`: human-readable name of the project
+
+4. `version`: Version of the project
+
+5. `versioning_schema`: Versioning schema used for project `version`s, for example, `SemVer v2.0.0` or `CalVer`.
+
+6. `description`: Component description, as a short text.
+
+7. `long_description_file`:
+
+8. `long_description_file_content_type`:
+
+9. `homepage_url`: URL to the homepage for this component.
+
+10. `documentation_url`:
+
+11. `changelog_file`: Changelog file for the component.
+
+12. `changelog_file_content_type`:
+
+13. `release_notes_file`: Release notes for the component.
+
+14. `release_notes_file_content_type`:
+
+15. `icon_url`: ...
+
+16. `languages`: ...
+If not provided by default it is neutral language // BCP47 / ISO ... TODO
+
+17. `issue_management`: mapping of the following fields:
++
+--
+1. `type`:
+
+2. `url`:
+--
+
+18. `ci_management`: mapping of the following fields:
++
+--
+1. `type`:
+
+2. `url`:
+--
+
+19. `mailing_lists`: sequence of mappings of the following fields:
++
+--
+1. `subscribe_email`:
+
+2. `unsubscribe_email`:
+
+3. `archive_urls`: sequence of URLs TODO
+
+4. `post_email`:
+--
+
+=== Copyright and Licensing Fields
+
+1. `copyright`: Copyright statement for the component, without email and address
+
+2. `copyright_email`:
+
+3. `copyright_address`:
+
+4. `notice_file`: Legal notice or credits for the component,
+for example, `NOTICE` file specified by Apache-2.0 license
+
+5. `license_expression`: The SPDX license expression that apply to the component
+
+6. `licenses`: Map which maps keys of licenses (used in `license_expression` field) to custom
+// TODO
++
+--
+1. `file`: License file that applies to the component. For example, the
+name of a license file such as LICENSE or COPYING file extracted from a
+downloaded archive.
+
+2. `url`: URL to the license text for the component.
+
+3. `name`: The license short name for the license.
+
+4. `key`: The license key(s) for the component.
+--
+
+7. `is_modified`: Whether the project is a modified original work (a fork).
+
+8. `is_internal`: Whether the project is used internal only (releases are not public).
+
+=== Organization, Author, Developer and Contributor Fields
+
+1. author: Name of the organization(s) or person(s) that authored the component.
+
+=== Fields to specify version control system (VCS)
+
+These fields provide a simple way to reference files stored in a version control
+system. There are many VCS tools such as CVS, Subversion, Git, ClearCase and GNU
+Arch. Accurate addressing of a file or directory revision in each tool in a
+uniform way may not be possible. Some tools may require access control via
+user/password or certificate and this information should not be stored in an
+ABOUT file. This extension defines the 'vcs' field extension prefix and a few
+common fields to handle the diversity of ways that VCS tools reference files and
+directories under version control:
+
+- vcs_tool: VCS tool such as git, svn, cvs, etc.
+
+- vcs_repository: Typically a URL or some other identifier used by a VCS tool to
+  point to a repository such as an SVN or Git repository URL.
+
+- vcs_path: Path used by a particular VCS tool to point to a file, directory or
+  module inside a repository.
+
+- vcs_tag: tag name or path used by a particular VCS tool.
+
+- vcs_branch: branch name or path used by a particular VCS tool.
+
+- vcs_revision: revision identifier such as a revision hash or version number.
+
+
+Some examples for using the vcs_* extension fields include::
+
+      vcs_tool: svn
+      vcs_repository: http://svn.code.sf.net/p/inkscape/code/inkscape_project/
+      vcs_path: trunk/inkscape_planet/
+      vcs_revision: 22886
+
+or::
+
+      vcs_tool: git
+      vcs_repository: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+      vcs_path: tools/lib/traceevent
+      vcs_revision: b59958d90b3e75a3b66cd311661535f94f5be4d1
+
+If Project Metadata file is located in directory managed by SCM then implementation:
+
+1. MAY use SCM data about remote repository instead of data specified in Project Metadata file
+
+2. MAY reset `modified` field to true whenever SCM data about remote repository doesn't match data
+from Project Metadata file (fork detection)
+
+== Extensions and Extra Fields
+
+1. You MAY create own extensions of this specification. All fields of extension MUST have
+short prefix to distinguish them from the standard fields. You SHOULD provide documentation for
+such extension and create or extend existing tools to support it.
++
+Names of fields of any extension MUST meet <<_value_types_and_field_names>> requirements.
+
+2. Implementation MUST either ignore any fields with unknown names or parse them
+as _extra_ dynamically-typed fields.
+
+== Specification Versions
+
+Version of Project Metadata specification used to create a file MUST be mentioned
+in `spec_version` field.
+
+Implementation of any version of this specification SHOULD be able to read files
+written with any previous major version of this specification.
+
+This specification is versioned according to SemVer 2.0.0.
+
+Implementation of any version of this specification MUST report an error when it parses Project Metadata
+with major version of `spec_version` greater than major version of implemented version.
+
+== Name of Project Metadata File
+
+Default name of Project Metadata file is `project-metadata.yaml`.
+
+Implementations and extensions may specify different default file name(s).
+
+== Acknowledgments and Differences with Other Existing Solutions
+
+* The idea goes to
+
+* Polyglot Maven
+
+* ClearlyDefined
