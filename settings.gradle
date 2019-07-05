@@ -12,7 +12,7 @@ pluginManagement {
   }
 }
 
-rootProject.name = 'gradle-about-plugin'
+rootProject.name = 'sourcemetadata.github.io'
 
 ext.rootDir = file('.')
 
