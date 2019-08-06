@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@sourcemetadata/jsonschema2asciidoc": "^1.1.2"
+  },
+  "devDependencies": {}
+}

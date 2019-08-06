@@ -135,117 +135,16 @@ MUST be determined according to YAML rules.
 
 == Standard Fields
 
-=== Mandatory Fields
-
-Fields `name` and `spec_version` MUST be present.
-
 === General Fields
-
-. `name`: programmatic name of the project
-
-. `title`: human-readable name of the project
 
 . `status`: ...
 If `version` field is provided and not matched TODO
 
-. `version`: Version of the project
-
-// TOTEST
-. `versioning_schema`: Versioning schema used for the project ``version``'s.
-Must be a valid https://versionmeta.org/[Version Meta] URI.
-For example, `SemVer.2.0.0`
-
-. `description`: Project description, as a short text.
-
-. `long_description_file`:
-
 . `long_description_file_content_type`:
-
-. `homepage_url`: URL to the homepage of the project.
-
-. `documentation_url`: separate URL to the documentation for the project.
-By default it equals to the value of `homepage_url` field
-
-. `wiki_url`: separate URL to the project wiki.
-
-. `changelog_file`: Changelog file for the project.
 
 . `changelog_file_content_type`:
 
-. `changelog_url`:
-
-. `release_notes_file`: Release notes for the project.
-
 . `release_notes_file_content_type`:
-
-. `icon_url`: an URL for the project icon. Icon MUST have size 64x64 pixels and MUST have transparent background
-
-. `languages`: sequence of https://tools.ietf.org/html/bcp47[BCP 47] language tags
-describing human languages explicitly supported by the project.
-For example, in which languages project messages are provided.
-Default value is neutral language (empty language tag).
-If this sequence contains more than one item then the first item MUST be original (primary) project language.
-
-. `issue_management`: mapping of the following fields:
-
-.. `type`:
-
-.. `url`:
-
-. `ci_management`: mapping of the following fields:
-
-.. `type`:
-
-.. `url`:
-
-. `mailing_lists`: sequence of mappings of the following fields:
-
-.. `subscribe_email`, `post_email`, `unsubscribe_email`: email addresses which are used for performing
-the relative actions
-
-.. `archive_urls`: sequence of URLs of the archive of old mailing list emails, if one exists.
-If this sequence contains more than one item then the first item MUST be interpreted as original URL
-and remaining MUST be interpreted as mirrors.
-
-. `inception_year`: the year of the project's inception, specified with 4 digits in Gregorian calendar
-
-. `keywords`: TODO
-
-. `cert_chain_file`: The certificate chain used to sign project's object code
-
-. `cert_chain_url`: The certificate chain used to sign project's object code
-
-=== Copyright and Licensing Fields
-
-. `copyright`: Copyright statement for the project, without email and address
-
-. `copyright_email`:
-
-. `copyright_address`:
-
-. `notice_file`: Legal notice or credits for the project,
-for example, `NOTICE` file specified by Apache-2.0 license
-
-. `license_expression`: The SPDX license expression that apply to the project
-
-. `distribution_under_licenses`: mapping having disjuncts from `license_expression` as keys
-and strings `repo` or `manual` as values.
-+
-This describes how the project may be legally distributed under which license.
-+
-`repo` means project object code MAY be downloaded from a package repository.
-+
-`manual` means it MUST be manually installed.
-
-. `is_modified`: Whether the project is a modified original work (a fork).
-By default it is false
-
-. `is_internal`: Whether the project is used internal only (releases are not public).
-By default it is false
-
-=== Organization, Author, Developer and Contributor Fields
-
-. author: Name of the organization(s) or person(s) that authored the project.
 
 === Fields to specify version control system (VCS)
 
@@ -258,46 +157,16 @@ ABOUT file. This extension defines the 'vcs' field extension prefix and a few
 common fields to handle the diversity of ways that VCS tools reference files and
 directories under version control:
 
-* `vcs_url`:
-
-. `vcs_tool`: VCS tool such as git, svn, cvs, etc.
-
-. `vcs_repository`: Typically a URL or some other identifier used by a VCS tool to
-  point to a repository such as an SVN or Git repository URL.
-
-. `vcs_path`: Path used by a particular VCS tool to point to a file, directory or
-  module inside a repository.
-
-. `vcs_tag`: tag name or path used by a particular VCS tool.
-
-. `vcs_branch`: branch name or path used by a particular VCS tool.
-
-. `vcs_revision`: revision identifier such as a revision hash or version number.
-
 // TODO: web-browseable URL
 // TODO: developer_connection_url
 
 
-Some examples for using the `vcs_*` extension fields include:
-
-      vcs_tool: svn
-      vcs_repository: http://svn.code.sf.net/p/inkscape/code/inkscape_project/
-      vcs_path: trunk/inkscape_planet/
-      vcs_revision: 22886
-
-or:
-
-      vcs_tool: git
-      vcs_repository: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-      vcs_path: tools/lib/traceevent
-      vcs_revision: b59958d90b3e75a3b66cd311661535f94f5be4d1
-
 If Source Metadata file is located in directory managed by SCM then:
 
-. Implementation MAY use SCM data about remote repository instead of data specified in Source Metadata file
+. Implementation MAY use SCM data about remote repository instead of data specified in Source Metadata file.
 
 . Implementation MAY reset `modified` field to true whenever SCM data about remote repository doesn't match data
-from Source Metadata file (fork detection)
+from Source Metadata file (fork detection).
 
 == Extensions and Extra Fields
 
@@ -317,7 +186,7 @@ as _extra_ dynamically-typed fields.
 == Specification Versions
 
 . Version of Source Metadata specification used to create a file MUST be mentioned
-in `spec_version` field.
+in `spec_version` field. TODO
 
 . This specification is versioned according to SemVer 2.0.0.
 

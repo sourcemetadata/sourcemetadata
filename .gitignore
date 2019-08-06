@@ -24,3 +24,6 @@ out/
 
 # GPGKeyImport
 .scoped-gpg/
+
+# NPM
+/node_modules/
