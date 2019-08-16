@@ -1,4 +1,6 @@
 {
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "http://sourcemetadata.org/v1.0.0/sourcemetadata.schema.json",
 	"definitions": {
 		"file": {
 			"type": "string"
@@ -60,9 +62,9 @@
 			}
 		}
 	},
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "http://sourcemetadata.org/v1.0.0/sourcemetadata.schema.json",
-	"$ref": "#object",
+  "allOf": [
+    { "$ref": "#object" },
+    {
 	"title": "root",
 	"required": [
 		"name"
@@ -126,8 +128,9 @@
 			"default": ""
 		},
 		"issue_management": {
-			"$ref": "#/definitions/object",
-			"properties": {
+      "allOf": [
+			{ "$ref": "#/definitions/object" },
+			{ "properties": {
 				"type": {
 					"type": "string",
 					"description": "TODO"
@@ -135,11 +138,12 @@
 				"url": {
 					"description": "TODO"
 				}
-			}
+			} } ]
 		},
 		"ci_management": {
-			"$ref": "#/definitions/object",
-			"properties": {
+    "allOf": [
+			{ "$ref": "#/definitions/object" },
+			{ "properties": {
 				"type": {
 					"type": "string",
 					"description": "TODO"
@@ -147,14 +151,15 @@
 				"url": {
 					"description": "TODO"
 				}
-			}
+			} } ]
 		},
 		"mailing_lists": {
 			"type": "array",
 			"description": "Version of the project",
 			"items": {
-				"$ref": "#/definitions/object",
-				"properties": {
+      "allOf": [
+				{ "$ref": "#/definitions/object" },
+				{ "properties": {
 					"subscribe_email": {
 						"description": "Email address which is used for performing subscribe action"
 					},
@@ -167,7 +172,7 @@
 					"archive_urls": {
 						"description": "Sequence of URLs of the archive of old mailing list emails, if one exists.\nIf this sequence contains more than one item then the first item MUST be interpreted as original URL and remaining MUST be interpreted as mirrors"
 					}
-				}
+				} } ]
 			}
 		},
 		"inception_year": {
@@ -210,6 +215,7 @@
 			"description": "Mapping having disjuncts from `license_expression` as keys and strings `repo` or `manual` as values.\n+\nThis describes how the project may be legally distributed under which license.\n+\n`repo` means project object code MAY be downloaded from a package repository.\n+\n`manual` means it MUST be manually installed.",
 			"patternProperties": {
 				"^.*$": {
+        "type": "string",
 					"enum": [
 						"repo",
 						"manual"
@@ -273,4 +279,5 @@
 			]
 		}
 	}
+  }]
 }
