@@ -90,10 +90,6 @@ It MUST be encoded in UTF-8 without byte order mark.
 . Rules listed in this section are applied to fields of root document
 and fields on all levels of nested mappings as well.
 
-. Field referencing file MUST have name `file` or suffix `_file`.
-+
-File path MUST be relative to the directory containing Source Metadata file.
-
 . /* TODO */ For fields referencing file this specification or specifications of extensions MAY prescribe
 separate sibling field with additional `_content_type` suffix.
 If such field is provided then its value MUST contain MIME type for the file
@@ -109,22 +105,7 @@ If file name has no extension then MIME type MUST be default `text/plain`.
 If specification doesn't prescribe such separate field
 then content type of file MUST be `text/plain` and charset MUST be UTF-8.
 
-. Field containing URL MUST have name `url` or suffix `_url`.
-
-. Field containing email address MUST have name `email` or suffix `_email`.
-
-. Field containing physical address MUST have name `address` or suffix `_address`.
-
-. Field containing boolean flags MUST have `is_` prefix.
-
-. Field containing sequences of files, URLs, emails or physical addresses MUST have names `files`, `urls`,
-`emails`, `addresses` or suffixes `_files`, `_urls`, `_emails`, `_addresses` respectively.
-Values in sequences SHOULD be unique.
-
-. All other fields not mentioned in articles 1-7 MAY be either strings, sequences of strings,
-mappings or sequences of mappings.
-+
-Types of predefined fields are prescribed by this specification and specifications of extensions.
+. Types of predefined fields are prescribed by this specification and specifications of extensions.
 +
 // https://github.com/asciidoctor/asciidoctor/issues/3253
 // TODO xref:Unknown_fields[xrefstyle="short"] */

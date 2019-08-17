@@ -19,21 +19,26 @@
 						"type": "object"
 					}
 				]
-			}
+			},
+			"uniqueItems": true
 		},
 		"file": {
-			"type": "string"
+			"type": "string",
+			"description": "Value referencing file.\n+\nFile path MUST be relative to the directory containing Source Metadata file"
 		},
 		"url": {
 			"type": "string",
-			"format": "uri"
+			"format": "uri",
+			"description": "containing URL"
 		},
 		"email": {
 			"type": "string",
-			"format": "email"
+			"format": "email",
+			"description": "containing email address"
 		},
 		"address": {
-			"type": "string"
+			"type": "string",
+			"description": "containing physical address"
 		},
 		"object": {
 			"$id": "#object",
@@ -72,6 +77,11 @@
 				},
 				"^is_.+$": {
 					"type": "boolean"
+				},
+				"^(?!is_)": {
+					"not": {
+						"type": "boolean"
+					}
 				},
 				"^(.+_|)files$": {
 					"type": "array",
@@ -269,8 +279,7 @@
 				},
 				"license": {
 					"type": "string",
-					"description": "License of the project.\n\nShould be https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60[SPDX 2.1 license expression].",
-					"pattern": "TODO"
+					"description": "License of the project.\n\nMUST be https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60[SPDX 2.1 license expression]"
 				},
 				"distribution_under_licenses": {
 					"type": "object",
