@@ -2,12 +2,31 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"$id": "http://sourcemetadata.org/v1.0.0/sourcemetadata.schema.json",
 	"definitions": {
+		"array": {
+			"type": "array",
+			"items": {
+				"anyOf": [
+					{
+						"type": "string"
+					},
+					{
+						"type": "integer"
+					},
+					{
+						"$ref": "#/definitions/array"
+					},
+					{
+						"type": "object"
+					}
+				]
+			}
+		},
 		"file": {
 			"type": "string"
 		},
 		"url": {
 			"type": "string",
-			"format": "url"
+			"format": "uri"
 		},
 		"email": {
 			"type": "string",
@@ -20,6 +39,25 @@
 			"$id": "#object",
 			"type": "object",
 			"patternProperties": {
+				"^.*$": {
+					"anyOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "integer"
+						},
+						{
+							"$ref": "#/definitions/array"
+						},
+						{
+							"type": "object"
+						}
+					]
+				},
 				"^(.+_|)file$": {
 					"$ref": "#/definitions/file"
 				},
@@ -39,245 +77,276 @@
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/file"
-					}
+					},
+					"uniqueItems": true
 				},
 				"^(.+_|)urls$": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/url"
-					}
+					},
+					"uniqueItems": true
 				},
 				"^(.+_|)emails$": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/email"
-					}
+					},
+					"uniqueItems": true
 				},
 				"^(.+_|)addresses$": {
 					"type": "array",
 					"items": {
 						"$ref": "#/definitions/address"
-					}
+					},
+					"uniqueItems": true
 				}
 			}
 		}
 	},
-  "allOf": [
-    { "$ref": "#object" },
-    {
-	"title": "root",
-	"required": [
-		"name"
-	],
-	"properties": {
-		"name": {
-			"type": "string",
-			"description": "Programmatic name of the project"
+	"allOf": [
+		{
+			"$ref": "#object"
 		},
-		"title": {
-			"type": "string",
-			"description": "Human-readable name of the project"
-		},
-		"version": {
-			"type": "string",
-			"description": "Version of the project"
-		},
-		"versioning_schema": {
-			"type": "string",
-			"format": "uri",
-			"description": "Versioning schema used for the project ``version``'s.\nMust be a valid https://versionmeta.org/[Version Meta] URI",
-			"examples": [
-				"SemVer.2.0.0"
-			]
-		},
-		"description": {
-			"type": "string",
-			"description": "Project description, as a short (single-line) text"
-		},
-		"long_description_file": {
-			"description": "TODO"
-		},
-		"homepage_url": {
-			"description": "URL to the homepage of the project"
-		},
-		"documentation_url": {
-			"description": "Separate URL to the documentation for the project.\nBy default it equals to the value of `homepage_url` field"
-		},
-		"wiki_url": {
-			"description": "Separate URL to the project wiki"
-		},
-		"changelog_file": {
-			"description": "Changelog file for the project"
-		},
-		"changelog_url": {
-			"description": "Version of the project"
-		},
-		"release_notes_file": {
-			"description": "Release notes for the project"
-		},
-		"icon_url": {
-			"description": "An URL for the project icon. Icon MUST have size 64x64 pixels and MUST have transparent background"
-		},
-		"languages": {
-			"type": "array",
-			"description": "Sequence of https://tools.ietf.org/html/bcp47[BCP 47] language tags describing human languages explicitly supported by the project.\nFor example, in which languages project messages are provided.\nDefault value is neutral language (empty language tag).\nIf this sequence contains more than one item then the first item MUST be original (primary) project language",
-			"items": {
-				"type": "string",
-				"pattern": "^(((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|\ni-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang))|((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+))$"
-			},
-			"default": ""
-		},
-		"issue_management": {
-      "allOf": [
-			{ "$ref": "#/definitions/object" },
-			{ "properties": {
-				"type": {
+		{
+			"title": "root",
+			"required": [
+				"name"
+			],
+			"properties": {
+				"name": {
 					"type": "string",
+					"description": "Programmatic name of the project"
+				},
+				"title": {
+					"type": "string",
+					"description": "Human-readable name of the project"
+				},
+				"version": {
+					"type": "string",
+					"description": "Version of the project"
+				},
+				"versioning_schema": {
+					"type": "string",
+					"format": "uri",
+					"description": "Versioning schema used for the project ``version``'s.\n\nMust be a valid https://versionmeta.org/[Version Meta] URI",
+					"examples": [
+						"SemVer.2.0.0"
+					]
+				},
+				"description": {
+					"type": "string",
+					"description": "Project description, as a short (single-line) text"
+				},
+				"long_description_file": {
 					"description": "TODO"
 				},
-				"url": {
-					"description": "TODO"
-				}
-			} } ]
-		},
-		"ci_management": {
-    "allOf": [
-			{ "$ref": "#/definitions/object" },
-			{ "properties": {
-				"type": {
+				"homepage_url": {
+					"description": "URL to the homepage of the project"
+				},
+				"documentation_url": {
+					"description": "Separate URL to the documentation for the project.\n\nBy default it equals to the value of `homepage_url` field"
+				},
+				"wiki_url": {
+					"description": "Separate URL to the project wiki"
+				},
+				"changelog_file": {
+					"description": "Changelog file for the project"
+				},
+				"changelog_url": {
+					"description": "Version of the project"
+				},
+				"release_notes_file": {
+					"description": "Release notes for the project"
+				},
+				"icon_url": {
+					"description": "An URL for the project icon. Icon MUST have size 64x64 pixels and MUST have transparent background"
+				},
+				"languages": {
+					"type": "array",
+					"description": "Sequence of https://tools.ietf.org/html/bcp47[BCP 47] language tags describing human languages explicitly supported by the project.\n\nFor example, in which languages project messages are provided.\n\nDefault value is neutral language (empty language tag).\n\nIf this sequence contains more than one item then the first item MUST be original (primary) project language",
+					"items": {
+						"type": "string",
+						"pattern": "^(((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang))|((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+))$"
+					},
+					"uniqueItems": true,
+					"default": ""
+				},
+				"issue_management": {
+					"allOf": [
+						{
+							"$ref": "#/definitions/object"
+						},
+						{
+							"properties": {
+								"type": {
+									"type": "string",
+									"description": "TODO"
+								},
+								"url": {
+									"description": "TODO"
+								}
+							}
+						}
+					]
+				},
+				"ci_management": {
+					"allOf": [
+						{
+							"$ref": "#/definitions/object"
+						},
+						{
+							"properties": {
+								"type": {
+									"type": "string",
+									"description": "TODO"
+								},
+								"url": {
+									"description": "TODO"
+								}
+							}
+						}
+					]
+				},
+				"mailing_lists": {
+					"type": "array",
+					"description": "Version of the project",
+					"items": {
+						"allOf": [
+							{
+								"$ref": "#/definitions/object"
+							},
+							{
+								"properties": {
+									"subscribe_email": {
+										"description": "Email address which is used for performing subscribe action"
+									},
+									"post_email": {
+										"description": "Email address which is used for performing post action"
+									},
+									"unsubscribe_email": {
+										"description": "Email address which is used for performing unsubscribe action"
+									},
+									"archive_urls": {
+										"description": "Sequence of URLs of the archive of old mailing list emails, if one exists.\n+\nIf this sequence contains more than one item then the first item MUST be interpreted as original URL and remaining MUST be interpreted as mirrors"
+									}
+								}
+							}
+						]
+					},
+					"uniqueItems": true
+				},
+				"inception_year": {
 					"type": "string",
+					"description": "The year of the project's inception. SHOULD be specified with 4 digits in Gregorian calendar"
+				},
+				"keywords": {
+					"type": "array",
+					"description": "TODO",
+					"items": {
+						"type": "string"
+					},
+					"uniqueItems": true
+				},
+				"cert_chain_file": {
+					"description": "The certificate chain used to sign project's object code"
+				},
+				"cert_chain_url": {
+					"description": "The certificate chain used to sign project's object code"
+				},
+				"copyright": {
+					"type": "string",
+					"description": "Copyright statement for the project, without email and address"
+				},
+				"copyright_email": {
 					"description": "TODO"
 				},
-				"url": {
+				"copyright_address": {
 					"description": "TODO"
-				}
-			} } ]
-		},
-		"mailing_lists": {
-			"type": "array",
-			"description": "Version of the project",
-			"items": {
-      "allOf": [
-				{ "$ref": "#/definitions/object" },
-				{ "properties": {
-					"subscribe_email": {
-						"description": "Email address which is used for performing subscribe action"
-					},
-					"post_email": {
-						"description": "Email address which is used for performing post action"
-					},
-					"unsubscribe_email": {
-						"description": "Email address which is used for performing unsubscribe action"
-					},
-					"archive_urls": {
-						"description": "Sequence of URLs of the archive of old mailing list emails, if one exists.\nIf this sequence contains more than one item then the first item MUST be interpreted as original URL and remaining MUST be interpreted as mirrors"
+				},
+				"notice_file": {
+					"description": "Legal notice or credits for the project, for example, `NOTICE` file specified by Apache-2.0 license"
+				},
+				"license": {
+					"type": "string",
+					"description": "License of the project.\n\nShould be https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60[SPDX 2.1 license expression].",
+					"pattern": "TODO"
+				},
+				"distribution_under_licenses": {
+					"type": "object",
+					"description": "Mapping having disjuncts from `license_expression` as keys and strings `repo` or `manual` as values.\n\nThis describes how the project may be legally distributed under which license",
+					"patternProperties": {
+						"^.*$": {
+							"type": "string",
+							"oneOf": [
+								{
+									"const": "repo",
+									"description": "Project object code MAY be downloaded from a package repository"
+								},
+								{
+									"const": "manual",
+									"description": "Project object code MUST be manually installed"
+								}
+							]
+						}
 					}
-				} } ]
-			}
-		},
-		"inception_year": {
-			"type": "string",
-			"description": "The year of the project's inception. SHOULD be specified with 4 digits in Gregorian calendar"
-		},
-		"keywords": {
-			"type": "array",
-			"description": "TODO",
-			"items": {
-				"type": "string"
-			}
-		},
-		"cert_chain_file": {
-			"description": "The certificate chain used to sign project's object code"
-		},
-		"cert_chain_url": {
-			"description": "The certificate chain used to sign project's object code"
-		},
-		"copyright": {
-			"type": "string",
-			"description": "Copyright statement for the project, without email and address"
-		},
-		"copyright_email": {
-			"description": "TODO"
-		},
-		"copyright_address": {
-			"description": "TODO"
-		},
-		"notice_file": {
-			"description": "Legal notice or credits for the project, for example, `NOTICE` file specified by Apache-2.0 license"
-		},
-		"license_expression": {
-			"type": "string",
-			"description": "The SPDX license expression that apply to the project",
-			"pattern": "TODO"
-		},
-		"distribution_under_licenses": {
-			"type": "object",
-			"description": "Mapping having disjuncts from `license_expression` as keys and strings `repo` or `manual` as values.\n+\nThis describes how the project may be legally distributed under which license.\n+\n`repo` means project object code MAY be downloaded from a package repository.\n+\n`manual` means it MUST be manually installed.",
-			"patternProperties": {
-				"^.*$": {
-        "type": "string",
-					"enum": [
-						"repo",
-						"manual"
+				},
+				"is_modified": {
+					"description": "Whether the project is a modified version of original work (a fork)",
+					"default": false
+				},
+				"is_internal": {
+					"description": "Whether the project is used internal only (releases are not public)",
+					"default": false
+				},
+				"author": {
+					"type": "string",
+					"description": "Name of the organization(s) or person(s) that authored the project"
+				},
+				"vcs_url": {
+					"description": "TODO"
+				},
+				"vcs_tool": {
+					"type": "string",
+					"description": "VCS tool such as git, svn, cvs, etc.",
+					"examples": [
+						"svn",
+						"git"
+					]
+				},
+				"vcs_repository": {
+					"type": "string",
+					"description": "Typically an URL or some other identifier used by a VCS tool to point to a repository such as an SVN or Git repository URL",
+					"examples": [
+						"http://svn.code.sf.net/p/inkscape/code/inkscape_project/",
+						"git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
+					]
+				},
+				"vcs_path": {
+					"type": "string",
+					"description": "Path used by a particular VCS tool to point to a file, directory or module inside a repository",
+					"examples": [
+						"trunk/inkscape_planet/",
+						"tools/lib/traceevent"
+					]
+				},
+				"vcs_tag": {
+					"type": "string",
+					"description": "Tag name or path used by a particular VCS tool"
+				},
+				"vcs_branch": {
+					"type": "string",
+					"description": "Branch name or path used by a particular VCS tool"
+				},
+				"vcs_revision": {
+					"type": "string",
+					"description": "Revision identifier such as a revision hash or version number",
+					"examples": [
+						"22886",
+						"b59958d90b3e75a3b66cd311661535f94f5be4d1"
 					]
 				}
 			}
-		},
-		"is_modified": {
-			"description": "Whether the project is a modified original work (a fork)",
-			"default": false
-		},
-		"is_internal": {
-			"description": "Whether the project is used internal only (releases are not public)",
-			"default": false
-		},
-		"author": {
-			"type": "string",
-			"description": "Name of the organization(s) or person(s) that authored the project"
-		},
-		"vcs_url": {
-			"description": "TODO"
-		},
-		"vcs_tool": {
-			"type": "string",
-			"description": "VCS tool such as git, svn, cvs, etc.",
-			"examples": [
-				"svn",
-				"git"
-			]
-		},
-		"vcs_repository": {
-			"type": "string",
-			"description": "Typically a URL or some other identifier used by a VCS tool to point to a repository such as an SVN or Git repository URL",
-			"examples": [
-				"http://svn.code.sf.net/p/inkscape/code/inkscape_project/",
-				"git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
-			]
-		},
-		"vcs_path": {
-			"type": "string",
-			"description": "Path used by a particular VCS tool to point to a file, directory or module inside a repository",
-			"examples": [
-				"trunk/inkscape_planet/",
-				"tools/lib/traceevent"
-			]
-		},
-		"vcs_tag": {
-			"type": "string",
-			"description": "Tag name or path used by a particular VCS tool"
-		},
-		"vcs_branch": {
-			"type": "string",
-			"description": "Branch name or path used by a particular VCS tool"
-		},
-		"vcs_revision": {
-			"type": "string",
-			"description": "Revision identifier such as a revision hash or version number",
-			"examples": [
-				"22886",
-				"b59958d90b3e75a3b66cd311661535f94f5be4d1"
-			]
 		}
-	}
-  }]
+	]
 }
