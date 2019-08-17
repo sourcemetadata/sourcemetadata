@@ -16,32 +16,13 @@
 						"$ref": "#/definitions/array"
 					},
 					{
-						"type": "object"
+						"$ref": "#/definitions/object"
 					}
 				]
 			},
 			"uniqueItems": true
 		},
-		"file": {
-			"type": "string",
-			"description": "Value referencing file.\n+\nFile path MUST be relative to the directory containing Source Metadata file"
-		},
-		"url": {
-			"type": "string",
-			"format": "uri",
-			"description": "containing URL"
-		},
-		"email": {
-			"type": "string",
-			"format": "email",
-			"description": "containing email address"
-		},
-		"address": {
-			"type": "string",
-			"description": "containing physical address"
-		},
 		"object": {
-			"$id": "#object",
 			"type": "object",
 			"patternProperties": {
 				"^.*$": {
@@ -50,76 +31,105 @@
 							"type": "string"
 						},
 						{
-							"type": "boolean"
+							"type": "integer"
 						},
 						{
-							"type": "integer"
+							"type": "boolean"
 						},
 						{
 							"$ref": "#/definitions/array"
 						},
 						{
-							"type": "object"
+							"$ref": "#/definitions/object"
 						}
 					]
-				},
-				"^(.+_|)file$": {
-					"$ref": "#/definitions/file"
-				},
-				"^(.+_|)url$": {
-					"$ref": "#/definitions/url"
-				},
-				"^(.+_|)email$": {
-					"$ref": "#/definitions/email"
-				},
-				"^(.+_|)address$": {
-					"$ref": "#/definitions/address"
-				},
-				"^is_.+$": {
-					"type": "boolean"
-				},
-				"^(?!is_)": {
-					"not": {
-						"type": "boolean"
-					}
-				},
-				"^(.+_|)files$": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/file"
-					},
-					"uniqueItems": true
-				},
-				"^(.+_|)urls$": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/url"
-					},
-					"uniqueItems": true
-				},
-				"^(.+_|)emails$": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/email"
-					},
-					"uniqueItems": true
-				},
-				"^(.+_|)addresses$": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/address"
-					},
-					"uniqueItems": true
 				}
 			}
+		},
+		"file": {
+			"type": "string",
+			"description": "Value referencing file.\n+\nFile path MUST be relative to the directory containing Source Metadata file"
+		},
+		"url": {
+			"type": "string",
+			"format": "uri",
+			"description": "Value containing URL"
+		},
+		"email": {
+			"type": "string",
+			"format": "email",
+			"description": "Value containing email address"
+		},
+		"address": {
+			"type": "string",
+			"description": "Value containing physical, postal or registered office address"
+		},
+		"extensibleObject": {
+			"allOf": [
+				{
+					"$ref": "#/definitions/object"
+				},
+				{
+					"patternProperties": {
+						"^(.+_|)file$": {
+							"$ref": "#/definitions/file"
+						},
+						"^(.+_|)url$": {
+							"$ref": "#/definitions/url"
+						},
+						"^(.+_|)email$": {
+							"$ref": "#/definitions/email"
+						},
+						"^(.+_|)address$": {
+							"$ref": "#/definitions/address"
+						},
+						"^is_.+$": {
+							"type": "boolean"
+						},
+						"^(?!is_)": {
+							"not": {
+								"type": "boolean"
+							}
+						},
+						"^(.+_|)files$": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/file"
+							},
+							"uniqueItems": true
+						},
+						"^(.+_|)urls$": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/url"
+							},
+							"uniqueItems": true
+						},
+						"^(.+_|)emails$": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/email"
+							},
+							"uniqueItems": true
+						},
+						"^(.+_|)addresses$": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/address"
+							},
+							"uniqueItems": true
+						}
+					}
+				}
+			]
 		}
 	},
 	"allOf": [
 		{
-			"$ref": "#object"
+			"$ref": "#/definitions/extensibleObject"
 		},
 		{
-			"title": "root",
+			"title": "Source Metadata",
 			"required": [
 				"name"
 			],
@@ -185,7 +195,7 @@
 				"issue_management": {
 					"allOf": [
 						{
-							"$ref": "#/definitions/object"
+							"$ref": "#/definitions/extensibleObject"
 						},
 						{
 							"properties": {
@@ -203,7 +213,7 @@
 				"ci_management": {
 					"allOf": [
 						{
-							"$ref": "#/definitions/object"
+							"$ref": "#/definitions/extensibleObject"
 						},
 						{
 							"properties": {
@@ -224,7 +234,7 @@
 					"items": {
 						"allOf": [
 							{
-								"$ref": "#/definitions/object"
+								"$ref": "#/definitions/extensibleObject"
 							},
 							{
 								"properties": {
