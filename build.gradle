@@ -1,4 +1,4 @@
-// SPDX-Copyright: ©  Basil Peace
+// SPDX-FileCopyrightText: ©  Basil Peace
 // SPDX-License-Identifier: CC0-1.0
 buildscript {
   repositories {
@@ -30,11 +30,20 @@ import org.ysb33r.grolifant.api.exec.ResolverFactoryRegistry
 import org.ysb33r.grolifant.api.ExtensionUtils
 import org.ysb33r.grolifant.api.OperatingSystem
 import org.ysb33r.grolifant.api.exec.ExecSpecInstantiator
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class NpmExecSpec extends AbstractCommandExecSpec {
+  /*
+   * WORKAROUND:
+   * Groovy bug:
+   * Cannot assign value of type java.io.File to variable of type org.ysb33r.grolifant.api.exec.ResolvableExecutable
+   * <grv87 2019-08-18>
+   */
+  @SuppressWarnings('UnnecessarySetter')
   NpmExecSpec(Project project) {
     super(project, new ResolverFactoryRegistry(project))
-    setEnvironment System.getenv()
+    environment = System.getenv()
     setExecutable OperatingSystem.current().findInPath('npm')
   }
 }
@@ -55,10 +64,18 @@ tasks.register('npmInstall') {
 
 // TODO: register npm install/update in prerequisites plugin
 
+@CompileStatic
 class NpxExecSpec extends AbstractCommandExecSpec {
+  /*
+   * WORKAROUND:
+   * Groovy bug:
+   * Cannot assign value of type java.io.File to variable of type org.ysb33r.grolifant.api.exec.ResolvableExecutable
+   * <grv87 2019-08-18>
+   */
+  @SuppressWarnings('UnnecessarySetter')
   NpxExecSpec(Project project) {
     super(project, new ResolverFactoryRegistry(project))
-    setEnvironment System.getenv()
+    environment = System.getenv()
     setExecutable OperatingSystem.current().findInPath('npx')
   }
 }
@@ -115,10 +132,18 @@ tasks.register('pajvSourcemetadata') {
   }
 }
 
+@CompileStatic
 class ReuseExecSpec extends AbstractCommandExecSpec {
+  /*
+   * WORKAROUND:
+   * Groovy bug:
+   * Cannot assign value of type java.io.File to variable of type org.ysb33r.grolifant.api.exec.ResolvableExecutable
+   * <grv87 2019-08-18>
+   */
+  @SuppressWarnings('UnnecessarySetter')
   ReuseExecSpec(Project project) {
     super(project, new ResolverFactoryRegistry(project))
-    setEnvironment System.getenv()
+    environment = System.getenv()
     setExecutable OperatingSystem.current().findInPath('reuse')
   }
 }
@@ -189,4 +214,11 @@ wrapper {
   gradleVersion = '5.6'
 }
 
-tasks.codenarcBuildSrc.enabled = false // TODO
+tasks.named('codenarcBuildSrc').configure {
+  /*
+   * WORKAROUND:
+   * 1. CodeNarc issue (TO REPORT) - false positive on scripts
+   * 2. Move this to gradle-base-plugins
+   */
+  disabledRules.add 'CompileStatic'
+}
