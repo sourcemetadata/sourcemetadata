@@ -1,5 +1,11 @@
 # SPDX-Copyright: ©  Basil Peace
 # SPDX-License-Identifier: CC0-1.0
+
+# Gradle
+.gradle/
+gradle.properties
+build/
+
 # IDEA User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -11,5 +17,3 @@
 
 # NPM
 /node_modules/
-
-/build/

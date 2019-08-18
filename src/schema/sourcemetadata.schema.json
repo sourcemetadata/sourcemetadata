@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "http://sourcemetadata.org/v1.0.0/schema",
+	"$id": "http://sourcemetadata.org/v$$VERSION$$/schema",
 	"definitions": {
 		"array": {
 			"type": "array",
@@ -148,7 +148,7 @@
 				},
 				"versioning_schema": {
 					"type": "string",
-					"description": "Versioning schema used for the project ``version``'s.\n\nIt is RECOMMENDED to use https://versionmeta.org/[Version Meta] tag, without curly braces",
+					"description": "Versioning schema used for the project ``version``'s.\n\nIt is RECOMMENDED to set it to https://versionmeta.org/[Version Meta] tag, without curly braces",
 					"examples": [
 						"SemVer.2.0.0"
 					]

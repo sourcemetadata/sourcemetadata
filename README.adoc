@@ -1,0 +1,29 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: CC0-1.0
+= Source Metadata
+
+Source Metadata file is a proposed language/tool-agnostic file format
+to store common information such as homepage, copyright, applied licenses
+about software project in its "`source code`" form.
+
+== Acknowledgments and Differences with Other Existing Solutions
+
+* The idea goes to https://www.aboutcode.org/[AboutCode]. It also uses YAML-like format.
+However, AboutCode describes project's artifacts (object code) and is not well-suited for sources.
+About ⅓ of properties that it offers are useless or not applicable for sources.
+
+* https://spdx.org/spdx-specification-21-web-version[SPDX] also describes software packages and generally says nothing
+about sources. Also, its format isn't very convenient to write by hands.
+
+* https://reuse.software/[REUSE] describes licenses and copyrights of individual files in the project sources
+and is able to generate SPDX bill of materials for them.
+However, it doesn't describe the project in the whole and is missing all other information except license and copyright.
+This specification extends REUSE practices.
+
+* https://docs.clearlydefined.io/clearly[ClearlyDefined] describes and collects
+some important properties of software projects. However, it doesn't define a standard file format
+to store such information together with sources, relying on complex parsing and manual labour instead.
+
+* https://github.com/takari/polyglot-maven[Polyglot Maven] is a tool for Maven that allows to store Maven properties
+in YAML format. Source Metadata partially replaces Polyglot Maven, in the part describing the project
+(but not steps to build/test/release it).

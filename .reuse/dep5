@@ -1,14 +1,24 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
-# Standard generated files
+# NPM
 Files:
  package.json
  package-lock.json
 Copyright: ©  Basil Peace
 License: CC0-1.0
 
+# Gradle wrapper
+Files:
+ gradlew
+ gradlew.bat
+ gradle/wrapper/gradle-wrapper.jar
+Copyright: Copyright 2015 the original author or authors. 
+License: Apache-2.0
+
 # Standard generated files
 Files:
+ *.lockfile
+ gradle/wrapper/gradle-wrapper.properties
 # IDEA project files should not contain
 # any creative (non-trivial) settings
  .idea/*

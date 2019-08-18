@@ -1,0 +1,192 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: CC0-1.0
+buildscript {
+  repositories {
+    /*maven {
+      url 'https://fidata.jfrog.io/fidata/plugins-releases'
+      credentials {
+        username = project.ext.artifactoryUser
+        password = project.ext.artifactoryPassword
+      }
+    }*/
+    mavenLocal()
+    // mavenCentral()
+  }
+  dependencies {
+    classpath 'org.ysb33r.gradle:grolifant:0.13.0-SNAPSHOT'
+  }
+}
+
+plugins {
+  id 'org.fidata.project' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT'
+}
+
+group = 'org.sourcemetadata'
+
+ext.rootDir = file('.')
+
+import org.ysb33r.grolifant.api.exec.AbstractCommandExecSpec
+import org.ysb33r.grolifant.api.exec.ResolverFactoryRegistry
+import org.ysb33r.grolifant.api.ExtensionUtils
+import org.ysb33r.grolifant.api.OperatingSystem
+import org.ysb33r.grolifant.api.exec.ExecSpecInstantiator
+
+class NpmExecSpec extends AbstractCommandExecSpec {
+  NpmExecSpec(Project project) {
+    super(project, new ResolverFactoryRegistry(project))
+    setEnvironment System.getenv()
+    setExecutable OperatingSystem.current().findInPath('npm')
+  }
+}
+
+ExtensionUtils.addExecProjectExtension('npmexec', project, { Project project ->
+  new NpmExecSpec(project)
+} as ExecSpecInstantiator<NpmExecSpec>)
+
+tasks.register('npmInstall') {
+  inputs.file 'package.json'
+  outputs.dir 'node_modules'
+  doLast {
+    project.npmexec {
+      command 'install'
+    }
+  }
+}
+
+// TODO: register npm install/update in prerequisites plugin
+
+class NpxExecSpec extends AbstractCommandExecSpec {
+  NpxExecSpec(Project project) {
+    super(project, new ResolverFactoryRegistry(project))
+    setEnvironment System.getenv()
+    setExecutable OperatingSystem.current().findInPath('npx')
+  }
+}
+
+ExtensionUtils.addExecProjectExtension('npxexec', project, { Project project ->
+  new NpxExecSpec(project)
+} as ExecSpecInstantiator<NpxExecSpec>)
+
+ext.schemaFile = file('src/schema/sourcemetadata.schema.json')
+
+ext.examplesPattern = '*.yaml'
+
+tasks.register('pajvValidExamples') {
+  inputs.file project.ext.schemaFile
+  File validExamplesDir = file('src/examples/valid')
+  inputs.files fileTree(validExamplesDir) {
+    include project.ext.examplesPattern
+  }
+  dependsOn 'npmInstall'
+  doLast {
+    project.npxexec {
+      command 'pajv'
+      cmdArgs '-s', project.ext.schemaFile, '-d', "$validExamplesDir/$project.ext.examplesPattern"
+    }
+  }
+}
+
+tasks.register('pajvInvalidExamples') {
+  inputs.file project.ext.schemaFile
+  File invalidExamplesDir = file('src/examples/invalid')
+  inputs.files fileTree(invalidExamplesDir) {
+    include project.ext.examplesPattern
+  }
+  dependsOn 'npmInstall'
+  doLast {
+    // TODO
+    /*project.npxexec {
+      command 'pajv'
+      cmdArgs '-s', project.ext.schemaFile, '-d', "$invalidExamplesDir/project.ext.examplesPattern"
+    }*/
+  }
+}
+
+tasks.register('pajvSourcemetadata') {
+  inputs.file project.ext.schemaFile
+  File sourcemetadataFile = file('sourcemetadata.yaml')
+  inputs.file sourcemetadataFile
+  dependsOn 'npmInstall'
+  doLast {
+    project.npxexec {
+      command 'pajv'
+      cmdArgs '-s', project.ext.schemaFile, '-d', sourcemetadataFile
+    }
+  }
+}
+
+class ReuseExecSpec extends AbstractCommandExecSpec {
+  ReuseExecSpec(Project project) {
+    super(project, new ResolverFactoryRegistry(project))
+    setEnvironment System.getenv()
+    setExecutable OperatingSystem.current().findInPath('reuse')
+  }
+}
+
+ExtensionUtils.addExecProjectExtension('reuseexec', project, { Project project ->
+  new ReuseExecSpec(project)
+} as ExecSpecInstantiator<ReuseExecSpec>)
+
+tasks.register('reuseLint') {
+  doLast {
+    project.reuseexec {
+      command 'lint'
+    }
+  }
+}
+
+tasks.named('check').configure {
+  dependsOn 'reuseLint', 'pajvSourcemetadata', 'pajvValidExamples', 'pajvInvalidExamples'
+}
+
+ext.docsDir = file('build/docs')
+
+tasks.register('generateDocs') {
+  inputs.file project.ext.schemaFile
+  outputs.dir project.ext.docsDir
+  dependsOn 'npmInstall'
+  doLast {
+    project.npxexec {
+      command 'jsonschema2asciidoc'
+      cmdArgs '--out', project.ext.docsDir, '--input', project.ext.schemaFile
+    }
+  }
+}
+
+tasks.register('packageArtifacts', Zip) {
+  from(project.tasks['generateDocs']) {
+    include '*.asciidoc'
+  }
+  from project.ext.schemaFile
+  from file('src/docs')
+}
+
+configurations {
+  output
+}
+
+artifacts {
+  output packageArtifacts
+}
+
+artifactory {
+  publish {
+    contextUrl = 'https://fidata.jfrog.io/fidata'
+    repository {
+      repoKey = 'generic'
+      username = artifactoryUser
+      password = artifactoryPassword
+    }
+    defaults {
+      publishConfigs('output')
+      publishPom = false
+      publishIvy = false
+    }
+  }
+}
+
+wrapper {
+  gradleVersion = '5.6'
+}
+
+tasks.codenarcBuildSrc.enabled = false // TODO

@@ -1,9 +1,7 @@
-// SPDX-Copyright: ©  Basil Peace
-// SPDX-License-Identifier: CC0-1.0
-"@schema": http://sourcemetadata.org/v1.0.0/schema
+"@schema": http://sourcemetadata.org/v$$VERSION$$/schema
 name: gradle-sourcemetadata-plugin
 version: 1.2.3
-versioning_schema: semver-2.0.0
+versioning_schema: SemVer.2.0.0
 description: |-
   Parsing Source Metadata files from Java and Gradle
 copyright: ©  Basil Peace

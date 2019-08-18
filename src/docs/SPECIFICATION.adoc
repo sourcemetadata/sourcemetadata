@@ -1,6 +1,6 @@
 // SPDX-Copyright: ©  Basil Peace
 // SPDX-License-Identifier: CC0-1.0
-= Source Metadata File Format Specification 1.0.0
+= Source Metadata File Format Specification $$VERSION$$
 
 :sectnums:
 :xrefstyle: short
@@ -73,7 +73,7 @@ MUST be determined according to YAML rules.
 
 . All field names are case-sensitive, however, use of lower snake case is RECOMMENDED.
 
-== Standard Fields
+include::build/docs/sourcemetadata.schema.asciidoc[leveloffset=+1]
 
 === General Fields
 
@@ -145,39 +145,35 @@ and MUST have the name `sourcemetadata.yaml`.
 
 == Additional Requirements
 
-Project sources MUST have license files placed and tagged according to
-https://reuse.software/practices/2.0/index.html#1-provide-the-exact-text-of-each-license-used[Section 1
-of REUSE practices].
+. Project sources MUST have license files placed
+according to https://reuse.software/spec/#license-files[REUSE Specification 3.0].
 
-Implementation MUST provide mapping of licenses and their files.
+. Implementation MUST provide mapping of licenses and their files.
 
-Implementation MUST also provide mapping of licenses and their names, URLs and comments.
+. Implementation MUST also provide mapping of licenses and their names, URLs and comments.
 To achieve this, in addition to REUSE Practices:
 
 // TODO: `Valid` prefix ?
-1. Headers of non-SPDX-listed licenses MUST have SPDX tag `LicenseName` described by
+.. Non-SPDX-listed licenses MUST have adjacent file of the same name with the additional `.license` extension.
+For example, `LicenseRef-CustomLicense.txt.license`. Such file is called `.license` companion file.
+File MUST have the same format as specified by REUSE Specification for comment headers.
+
+.. `.license` companion file MUST have tag `SPDX-LicenseName` with content described by
 Section https://spdx.org/spdx-specification-21-web-version#h.19c6y18[6.3]
 of SPDX Specification 2.1.
 
-2. Headers of non-SPDX-listed licenses MAY have the following SPDX tags:
+.. `.license` companion file MAY have the following tags:
 +
 --
- * `LicenseCrossReference`: URL to the license text
+* `SPDX-LicenseCrossReference`: URL to the license text
 
- * `LicenseComment`
+* `SPDX-LicenseComment`: any general comments about the license
 --
 +
 described by Sections https://spdx.org/spdx-specification-21-web-version#h.3tbugp1[6.4] and
 https://spdx.org/spdx-specification-21-web-version#h.28h4qwu[6.5]
 of SPDX Specification 2.1 respectively.
 
-3. For SPDX-listed licenses values of `LicenseName`, `LicenseCrossReference` and `LicenseComments` tags SHOULD be got
-from SPDX license list.
-
-== Acknowledgments and Differences with Other Existing Solutions
-
-* The idea goes to
-
-* Polyglot Maven
-
-* ClearlyDefined
+.. For SPDX-listed licenses, if `.license` companion file exists, it MUST NOT contain tags specified above.
+Implementation MUST use values of `SPDX-LicenseName`, `SPDX-LicenseCrossReference` and `SPDX-LicenseComments`
+tags from SPDX license list.

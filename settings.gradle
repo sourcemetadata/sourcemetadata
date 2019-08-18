@@ -1,0 +1,19 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: CC0-1.0
+pluginManagement {
+  repositories {
+    maven {
+      url 'https://fidata.jfrog.io/fidata/plugins-snapshot/'
+      credentials {
+        username = settings.ext.artifactoryUser
+        password = settings.ext.artifactoryPassword
+      }
+    }
+  }
+}
+
+rootProject.name = 'spec'
+
+ext.rootDir = file('.')
+
+apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
