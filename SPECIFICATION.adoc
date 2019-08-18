@@ -32,7 +32,7 @@ A valid Source Metadata file may look like this:
 
 [source,yaml]
 ----
-include::examples/example.yaml[]
+include::examples/valid/example.yaml[]
 ----
 
 == File Format
