@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "http://sourcemetadata.org/v1.0.0/sourcemetadata.schema.json",
+	"$id": "http://sourcemetadata.org/v1.0.0/schema",
 	"definitions": {
 		"array": {
 			"type": "array",
@@ -64,7 +64,7 @@
 			"type": "string",
 			"description": "Value containing physical, postal or registered office address"
 		},
-		"extensibleObject": {
+		"extensible_object": {
 			"allOf": [
 				{
 					"$ref": "#/definitions/object"
@@ -126,7 +126,7 @@
 	},
 	"allOf": [
 		{
-			"$ref": "#/definitions/extensibleObject"
+			"$ref": "#/definitions/extensible_object"
 		},
 		{
 			"title": "Source Metadata",
@@ -148,8 +148,7 @@
 				},
 				"versioning_schema": {
 					"type": "string",
-					"format": "uri",
-					"description": "Versioning schema used for the project ``version``'s.\n\nMust be a valid https://versionmeta.org/[Version Meta] URI",
+					"description": "Versioning schema used for the project ``version``'s.\n\nIt is RECOMMENDED to use https://versionmeta.org/[Version Meta] tag, without curly braces",
 					"examples": [
 						"SemVer.2.0.0"
 					]
@@ -195,7 +194,7 @@
 				"issue_management": {
 					"allOf": [
 						{
-							"$ref": "#/definitions/extensibleObject"
+							"$ref": "#/definitions/extensible_object"
 						},
 						{
 							"properties": {
@@ -213,7 +212,7 @@
 				"ci_management": {
 					"allOf": [
 						{
-							"$ref": "#/definitions/extensibleObject"
+							"$ref": "#/definitions/extensible_object"
 						},
 						{
 							"properties": {
@@ -234,7 +233,7 @@
 					"items": {
 						"allOf": [
 							{
-								"$ref": "#/definitions/extensibleObject"
+								"$ref": "#/definitions/extensible_object"
 							},
 							{
 								"properties": {

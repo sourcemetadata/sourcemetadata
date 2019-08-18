@@ -1,6 +1,7 @@
 {
-  "dependencies": {
-    "@sourcemetadata/jsonschema2asciidoc": "^1.1.2"
-  },
-  "devDependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "@sourcemetadata/jsonschema2asciidoc": "^1.1.4",
+    "@sourcemetadata/pajv": "^2.0.0"
+  }
 }

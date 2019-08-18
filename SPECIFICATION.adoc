@@ -1,6 +1,6 @@
 // SPDX-Copyright: ©  Basil Peace
 // SPDX-License-Identifier: CC0-1.0
-= Source Metadata File Format Specification 0.1.0
+= Source Metadata File Format Specification 1.0.0
 
 :sectnums:
 :xrefstyle: short
@@ -8,6 +8,9 @@
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT",
 "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted
 as described in https://tools.ietf.org/html/rfc2119[RFC 2119].
+
+Terms "`source code`", "`object code`", "`original work`", "`modified version`" in this document
+are to be interpreted the same way as by https://www.gnu.org/licenses/gpl-3.0.en.html#section1[GPL 3.0].
 
 == Purpose
 
@@ -23,58 +26,14 @@ Source Metadata can also be used for sources of art works, including fonts.
 Source Metadata file is language/tool-agnostic. It generally doesn't describe non-source forms (object code)
 of software. However, build tools are encouraged to use Source Metadata to describe produced artifacts.
 
-Terms "`source code`" and "`object code`" in this section are to be interpreted the same way
-as by https://www.gnu.org/licenses/gpl-3.0.en.html#section1[GPL 3.0].
-
 == Getting Started
 
 A valid Source Metadata file may look like this:
 
-```yaml
-name: gradle-sourcemetadata-plugin
-spec_version: 1.0.0
-version: 1.2.3
-versioning_schema: semver-2.0.0
-description: |-
-  Parsing Source Metadata files from Java and Gradle
-copyright: ©  Basil Peace
-copyright_email: grv87@yandex.ru
-license_expression: GPL-3.0-or-later OR LicenseRef-Proprietary
-licenses:
-  GPL-3.0-or-later:
-    distribution: manual
-  LicenseRef-Proprietary:
-    distribution: repo
-is_internal: false
-scm_url: scm:git:https://github.com/FIDATA/gradle-metadata-plugin
-organization:
-  name: FIDATA
-  url: https://fidata.org/
-developers:
-  grv87:
-    name: Basil Peace
-    organization: FIDATA
-    roles:
-      - author
-      - owner
-      - developer
-    timezone: Europe/Moscow
-    properties:
-      github: grv87
-      twitter: grv87
-issue_management:
-  system: GitHub
-  url: https://github.com/FIDATA/gradle-metadata-plugin/issues
-ci_management:
-  system: Jenkins
-  url: https://jenkins.fidata.org/job/Github/job/gradle-metadata-plugin/
-keywords:
-  - project
-  - metadata
-  - info
-  - contacts
-  - license
-```
+[source,yaml]
+----
+include::examples/example.yaml[]
+----
 
 == File Format
 
@@ -146,7 +105,7 @@ If Source Metadata file is located in directory managed by SCM then:
 
 . Implementation MAY use SCM data about remote repository instead of data specified in Source Metadata file.
 
-. Implementation MAY reset `modified` field to true whenever SCM data about remote repository doesn't match data
+. Implementation MAY reset `is_modified` field to true whenever SCM data about remote repository doesn't match data
 from Source Metadata file (fork detection).
 
 == Extensions and Extra Fields

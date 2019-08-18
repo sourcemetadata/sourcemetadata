@@ -1,13 +1,5 @@
 # SPDX-Copyright: ©  Basil Peace
-# SPDX-License-Identifier: Apache-2.0
-# Gradle
-.gradle/
-gradle.properties
-build/
-
-# GFM Viewer
-.*.md.html
-
+# SPDX-License-Identifier: CC0-1.0
 # IDEA User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -17,13 +9,7 @@ build/
 # IDEA Legacy Project Format
 *.iws
 
-# IDEA Gradle
-*.iml
-.idea/**/gradle.xml
-out/
-
-# GPGKeyImport
-.scoped-gpg/
-
 # NPM
 /node_modules/
+
+/build/

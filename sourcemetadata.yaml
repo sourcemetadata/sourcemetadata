@@ -1,0 +1,45 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: CC0-1.0
+"@schema": http://sourcemetadata.org/v1.0.0/schema
+name: sourcemetadata
+version: 1.0.0
+versioning_schema: semver-2.0.0
+description: |-
+  Parsing Source Metadata files from Java and Gradle
+copyright: ©  Basil Peace
+copyright_email: grv87@yandex.ru
+license_expression: CC0-1.0
+licenses:
+  GPL-3.0-or-later:
+    distribution: manual
+  LicenseRef-Proprietary:
+    distribution: repo
+is_internal: false
+scm_url: scm:git:https://github.com/sourcemetadata/sourcemetadata
+organization:
+  name: SourceMetadata
+  url: https://sourcemetadata.org/
+developers:
+  grv87:
+    name: Basil Peace
+    organization: FIDATA
+    roles:
+      - author
+      - owner
+      - developer
+    timezone: Europe/Moscow
+    properties:
+      github: grv87
+      twitter: grv87
+issue_management:
+  system: GitHub
+  url: https://github.com/FIDATA/gradle-metadata-plugin/issues
+ci_management:
+  system: Jenkins
+  url: https://jenkins.fidata.org/job/Github/job/gradle-metadata-plugin/
+keywords:
+  - project
+  - metadata
+  - info
+  - contacts
+  - license

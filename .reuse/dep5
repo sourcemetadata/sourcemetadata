@@ -1,0 +1,24 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+# Standard generated files
+Files:
+ package.json
+ package-lock.json
+Copyright: ©  Basil Peace
+License: CC0-1.0
+
+# Standard generated files
+Files:
+# IDEA project files should not contain
+# any creative (non-trivial) settings
+ .idea/*
+# CAVEAT:
+# While these files are required to build software,
+# they can be regenerated from sources. Under the terms of GPL
+# (if we use it) they won't constitute corresponding source.
+# So, we dedicate them to public domain as much as possible
+# under applicable law.
+# If court of law considers these files as uncopyrightable
+# then there will be no harm
+Copyright: ©  Basil Peace
+License: CC0-1.0
